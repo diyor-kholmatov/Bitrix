@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Styled Form</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .error-message {
+            color: rgb(255, 0, 0);
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #af4c6d;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<form id="myForm">
+    <label for="name">Name (Обязательное поле):</label>
+    <input type="name" id="name" name="name" required>
+
+    <label for="phone_number">Phone number (Обязательное поле, формат +998993656565):</label>
+    <input type="text" id="phone_number" name="phone_number" pattern="\+\d{10}" required>
+
+    <label for="email">E-mail (Обязательное поле, формат example@example.com):</label>
+    <input type="text" id="email" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required>
+
+    <div class="error-message" id="errorMessage"></div>
+
+    <button type="button" onclick="validateForm()">Отправить</button>
+</form>
+
+<script>
+    function validateForm() {
+        var textValue = document.getElementById('name').value;
+        var phoneValue = document.getElementById('phone_number').value;
+        var emailValue = document.getElementById('email').value;
+        var errorMessage = document.getElementById('errorMessage');
+
+        errorMessage.innerHTML = '';
+
+        if (textValue === '' || !textValue.trim()) {
+            errorMessage.innerHTML += 'Name не может быть пустым.<br>';
+        }
+
+        if (!phoneValue.match(/^\+\d{10}$/)) {
+            errorMessage.innerHTML += 'Phone number должен иметь формат +998993656565.<br>';
+        }
+
+        if (!emailValue.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+            errorMessage.innerHTML += 'E-mail должен иметь формат example@example.com.<br>';
+        }
+
+        if (errorMessage.innerHTML === '') {
+            alert('Форма валидна. Можно отправлять данные.');
+        }
+    }
+</script>
+
+</body>
+</html>

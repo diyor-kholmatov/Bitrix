@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undo Button Example</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            width: 300px;
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<form id="myForm">
+    <label for="name">Имя:</label>
+    <input type="text" id="name" name="name">
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email">
+
+    <button type="button" onclick="undo()">Назад</button>
+</form>
+
+<script>
+    // Изначальное состояние формы
+    var initialState = {};
+
+    // Текущее состояние формы
+    var currentState = {};
+
+    // Стек для хранения предыдущих состояний
+    var stateStack = [];
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Сохраняем изначальное состояние формы при загрузке страницы
+        saveState();
+    });
+
+    function saveState() {
+        // Клонируем текущее состояние формы и добавляем его в стек
+        stateStack.push({ ...currentState });
+        updateUndoButton();
+    }
+
+    function undo() {
+        if (stateStack.length > 1) {
+            // Извлекаем предыдущее состояние из стека
+            stateStack.pop();
+            currentState = { ...stateStack[stateStack.length - 1] };
+
+            // Восстанавливаем значения в форме
+            document.getElementById('name').value = currentState.name || '';
+            document.getElementById('email').value = currentState.email || '';
+
+            updateUndoButton();
+        }
+    }
+
+    // Добавьте обработчики событий изменения значений в форме
+    document.getElementById('name').addEventListener('input', function () {
+        currentState.name = this.value;
+        saveState();
+    });
+
+    document.getElementById('email').addEventListener('input', function () {
+        currentState.email = this.value;
+        saveState();
+    });
+
+    function updateUndoButton() {
+        var undoButton = document.querySelector('button');
+        undoButton.disabled = stateStack.length <= 1;
+    }
+</script>
+
+</body>
+</html>
